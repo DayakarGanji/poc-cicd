@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<XMLToJSON async="false" continueOnError="false" enabled="true" name="xmltojson">
+    <DisplayName>xmltojson</DisplayName>
+    <Properties/>
+    <OutputVariable>error.content</OutputVariable>
+    <Source>error.content</Source>
+    <Options>
+        <StripLevels>2</StripLevels>
+    </Options>
+</XMLToJSON>

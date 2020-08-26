@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="default">
+    <PreFlow name="PreFlow">
+        <Request/>
+        <Response>
+            <Step>
+                <Condition>(response.header.Content-Type = "application/json")</Condition>
+                <Name>set-custom-json-response</Name>
+            </Step>
+            <Step>
+                <Name>add-cors</Name>
+            </Step>
+            <Step>
+                <Name>am-remove-set-cookie</Name>
+            </Step>
+        </Response>
+    </PreFlow>
+    <Flows>
+        <Flow name="generateDocument">
+            <Description>generate Document</Description>
+            <Request>
+                <Step>
+                    <Name>set-path</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/generate-document") and (request.verb = "POST")</Condition>
+        </Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response>
+            <!--<Step>-->
+            <!--    <Name>XML-to-JSON</Name>-->
+            <!--</Step>-->
+        </Response>
+    </PostFlow>
+    <HTTPTargetConnection>
+        <LoadBalancer>
+            <Server name="Smart-communication-server"/>
+        </LoadBalancer>
+        <Path>/one/oauth2/api/v8/job/{setPath}</Path>
+    </HTTPTargetConnection>
+</TargetEndpoint>

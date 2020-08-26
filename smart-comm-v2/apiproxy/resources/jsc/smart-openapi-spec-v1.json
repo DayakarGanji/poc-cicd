@@ -1,0 +1,589 @@
+var swagger = {
+  "swagger": "2.0",
+  "info": {
+    "version": "1",
+    "title": "Smart communication API",
+    "description": "Smart communication APIs helps to generate documents with a predefined template.The document template needs to setup in Smart communciation website.",
+    "contact": {
+      "email": "Selvaraju.P@hclom.co.uk"
+    },
+    "license": {
+      "name": "Smart Communciations API",
+      "url": "https://eu10-sb.smartcommunications.cloud/one"
+    }
+  },
+  "securityDefinitions": {
+    "key": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "apikey"
+    }
+  },
+  "host": "emea-demo8-test.apigee.net",
+  "basePath": "/smartcomm/v1",
+  "schemes": [
+    "https"
+  ],
+  "tags": [
+    {
+      "name": "document"
+    }
+  ],
+  "paths": {
+    "/generate-document": {
+      "post": {
+        "tags": [
+          "document"
+        ],
+        "summary": "Generate Document",
+        "description": "Generates a document.<br><br>When you generate a document as HTML that includes images, you will need to implement additional code to make the images available on a cache you can access. This is because by default the document contains links to the images that are stored in an authenticated cache, so you will not see them when sent in an email.<br/></br>The following properties can be used as property values in the document request. The properties available to generate a document are: <table class=\"table table-striped fullwidth\"><thead><tr><th style=\"width: 100px; max-width: 100px\">Property name</th><th style=\"width: 300px; max-width: 300px\">Description</th><th style=\"width: 100px; max-width: 100px\">Default value</th></tr></thead><tr><td>merge.pdf</td><td>If you have a PDF primary document with PDF enclosures, the enclosures are merged with the primary document to give a single PDF. This merging process does not compress the merged PDF. By default all PDF enclosures will be merged if the primary print format is PDF. Set to false to turn off merging of PDF enclosures.</td><td>TRUE</td></tr><tr><td>merge.alwayspdf</td><td>If you have a non-PDF primary document with PDF enclosures, by default the PDF enclosures are not merged. Set to true to enable PDF enclosures to be merged when the primary print format is non-PDF. When set to true, the content in the PDF enclosures is merged.</td><td>FALSE</td></tr><tr><td>merge.printChannel</td><td>By default non-PDF enclosures are printed separately and merging is disabled. Set to true to enable merging of non-PDF enclosures, including PostScript and AFP.</td><td>FALSE</td></tr><tr><td>merge.taggedpdf</td><td>If you require accessible or tagged PDFs to be produced then we recommend this setting is set to true. Otherwise the merged PDF will not be properly tagged.</td><td>TRUE</td></tr><tr><td>inline-css</td><td>Embed CSS for an HTML page into the HTML at an inline level</td><td>FALSE</td></tr><tr><td>render-track-changes</td><td>Show track changes</td><td>FALSE</td></tr><tr><td>print.mimicformat</td><td>If print format is XML, mimic an alternate format when rendering the document</td><td>\"XML\"</td></tr><tr><td>preview.exclude</td><td>Exclude the master channel from any document merge</td><td>FALSE</td></tr><tr><td>job.message.level</td><td>Sets the log level for logInfo(), logWarning(), and logError() messages in scriptable batches and scriptable template selectors. The output is displayed as Job Messages returned in calls to 'Generate Document' and 'Generate Draft'. Possible values are 0 (error), 1 (warning), 2 (info).</td><td>1</td></tr><tr><td>html.normalizespace</td><td>Remove indentation in the XHTML</td><td>FALSE</td></tr></table>",
+        "operationId": "generateDocument",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-app-id",
+            "description": "Quilter Application Id",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Document request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DocumentRequest"
+            }
+          },
+          {
+            "name": "includeDocumentData",
+            "in": "query",
+            "description": "Query parameter.<br>Boolean flag to determine whether generated document data should be provided directly. Possible values are true or false. If true, base64 data will be provided for each channel result. If false, a URL for retrieving the data will be provided for each channel result.",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "security": [
+          {
+            "key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/DocumentEnvelope"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ErrorInfo"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ErrorInfo"
+            }
+          },
+          "403": {
+            "description": "Generate Document has failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorInfo"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorInfo"
+            }
+          },
+          "405": {
+            "description": "Invalid Input",
+            "schema": {
+              "$ref": "#/definitions/ErrorInfo"
+            }
+          },
+          "500": {
+            "description": "Server Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorInfo"
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorInfo"
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "schema": {
+              "$ref": "#/definitions/ErrorInfo"
+            }
+          },
+          "504": {
+            "description": "Gateway Timeout",
+            "schema": {
+              "$ref": "#/definitions/ErrorInfo"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Choice": {
+      "type": "object",
+      "properties": {
+        "preview": {
+          "type": "string",
+          "example": "choice preview",
+          "description": "The choice preview"
+        },
+        "relations": {
+          "type": "array",
+          "description": "The relations referred to by this choice",
+          "items": {
+            "type": "string"
+          }
+        },
+        "choiceLists": {
+          "type": "array",
+          "description": "An array of choices lists contained by this choice",
+          "items": {
+            "$ref": "#/definitions/ChoiceList"
+          }
+        },
+        "description": {
+          "type": "string",
+          "example": "A description of the choice",
+          "description": "The choice description"
+        },
+        "name": {
+          "type": "string",
+          "example": "choice1",
+          "description": "The name given to the choice"
+        }
+      },
+      "xml": {
+        "name": "choice"
+      },
+      "x-thunderhead-xml-container-name": "Choices"
+    },
+    "ChoiceList": {
+      "type": "object",
+      "properties": {
+        "channel": {
+          "type": "integer",
+          "format": "int64",
+          "example": 2,
+          "description": "The review channel this list belongs to"
+        },
+        "choices": {
+          "type": "array",
+          "description": "The choices within this list",
+          "items": {
+            "$ref": "#/definitions/Choice"
+          }
+        },
+        "selected": {
+          "type": "array",
+          "example": "choiceName",
+          "description": "For multiple choice lists, the choices as comma-separated values",
+          "items": {
+            "type": "string"
+          }
+        },
+        "destination": {
+          "type": "integer",
+          "format": "int64",
+          "example": -5,
+          "description": "The channel destination this list belongs to"
+        },
+        "type": {
+          "type": "integer",
+          "format": "int32",
+          "example": 0,
+          "description": "The selection type of the choice list.<br>Choose between Single (0), where the choice is limited to one of the available options, but selection is enforced, and Multiple (1) where any number of Choices may be selected, or none at all."
+        },
+        "description": {
+          "type": "string",
+          "example": "The first choice list",
+          "description": "The description of this list"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "the ChoiceLists ID"
+        },
+        "name": {
+          "type": "string",
+          "example": "choiceList1",
+          "description": "The name of the choice list"
+        }
+      },
+      "xml": {
+        "name": "choiceList"
+      },
+      "x-thunderhead-xml-container-name": "ChoiceLists"
+    },
+    "DocumentEnvelope": {
+      "type": "object",
+      "properties": {
+        "jobMessages": {
+          "type": "array",
+          "description": "The list of messages that occurred while executing the job.<br>Includes the log messages generated by using the logWarning, logInfo, and logError commands in your Scriptable Template Selector or Document Script.",
+          "items": {
+            "$ref": "#/definitions/JobReportMessage"
+          }
+        },
+        "numberTransactions": {
+          "type": "integer",
+          "format": "int32",
+          "example": 1,
+          "description": "The number of transactions encountered in the job"
+        },
+        "dataModelValuesLocation": {
+          "type": "string",
+          "example": "/job/cachedItems/requestid/parts/0",
+          "description": "The reference to the data model values part"
+        },
+        "previewKey": {
+          "type": "string",
+          "example": "8f795144-887c-41cb-a485-399c6ca41abf",
+          "description": "Key is used to retrieve document parts.<br>Not used when includeDocumentData is set to true in the request."
+        },
+        "envelopes": {
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          },
+          "description": "The list of envelopes generated",
+          "items": {
+            "xml": {
+              "name": "envelope"
+            },
+            "$ref": "#/definitions/Envelope"
+          }
+        },
+        "exceptions": {
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          },
+          "description": "The list of user-defined business exceptions in the document",
+          "items": {
+            "xml": {
+              "name": "exception"
+            },
+            "$ref": "#/definitions/exception"
+          }
+        }
+      },
+      "xml": {
+        "name": "documentEnvelope"
+      },
+      "x-thunderhead-xml-container-name": "DocumentEnvelopes"
+    },
+    "DocumentRequest": {
+      "type": "object",
+      "required": [
+        "batchConfigResId",
+        "projectId",
+        "transactionData"
+      ],
+      "properties": {
+        "transactionDataType": {
+          "type": "string",
+          "description": "The content type of the transaction data. Can be 'application/xml' or 'application/json'. Defaults to 'application/xml'"
+        },
+        "transactionData": {
+          "type": "string",
+          "example": "PERhdGEgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOm5vTmFtZXNwYWNlU2NoZW1hTG9jYXRpb249ImhyX2RhdGEueHNkIj48L0RhdGE+",
+          "description": "The sample data. The data is encoded as Base64."
+        },
+        "batchConfigResId": {
+          "example": "1011000000766",
+          "description": "The CMS ID of the Template Selector resource. The Template Selector is used to map the transaction data to the Template and Data Model."
+        },
+        "batchConfigData": {
+          "type": "string",
+          "example": "PGJhdGNoY29uZmlnPjwvYmF0Y2hjb25maWc+",
+          "description": "Template Selector data encoded as Base64"
+        },
+        "transactionRange": {
+          "type": "string",
+          "example": "1",
+          "description": "If the sample data contains more than one transaction then this value specifies which transaction to use to generate the document"
+        },
+         "projectId": {
+          "example": "150800000",
+          "description": "The CMS project ID used to scope the request execution. If this value is not specified then the job will execute in production mode."
+        },
+        "properties": {
+          "type": "array",
+          "description": "A list of optional configuration properties",
+          "items": {
+            "$ref": "#/definitions/properties"
+          }
+        }
+      },
+      "xml": {
+        "name": "documentRequest"
+      },
+      "x-thunderhead-xml-container-name": "DocumentRequests"
+    },
+    "Envelope": {
+      "type": "object",
+      "properties": {
+        "masterChannel": {
+          "description": "The primary document in the envelope",
+          "$ref": "#/definitions/TemplatePreviewChannel"
+        },
+        "slaveChannels": {
+          "type": "array",
+          "xml": {
+            "wrapped": true
+          },
+          "description": "The list of the enclosures in the envelope",
+          "items": {
+            "xml": {
+              "name": "slaveChannel"
+            },
+            "$ref": "#/definitions/TemplatePreviewChannel"
+          }
+        }
+      },
+      "xml": {
+        "name": "envelope"
+      },
+      "x-thunderhead-xml-container-name": "Envelopes"
+    },
+    "ErrorInfo": {
+      "type": "object",
+      "properties": {
+        "error_code": {
+          "type": "string",
+          "description": "The error Code"
+        },
+        "error_message": {
+          "type": "string",
+          "description": "The error description"
+        },
+        "error_details": {
+          "type": "array",
+          "description": "The error details",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "xml": {
+        "name": "errorinfo"
+      },
+      "x-thunderhead-xml-container-name": "errorinfos"
+    },
+    "JobReportMessage": {
+      "type": "object",
+      "properties": {
+        "msgID": {
+          "type": "integer",
+          "format": "int32",
+          "example": 4043,
+          "description": "The ID of this message"
+        },
+        "destID": {
+          "type": "integer",
+          "format": "int64",
+          "example": -5,
+          "description": "The ID of the destination"
+        },
+        "channelID": {
+          "type": "integer",
+          "format": "int64",
+          "example": 2,
+          "description": "The ID of the channel"
+        },
+        "msgDate": {
+          "type": "string",
+          "example": "Feb 14, 2017 10:06:06 AM",
+          "description": "The date/time of the message"
+        },
+        "transactionNo": {
+          "type": "integer",
+          "format": "int32",
+          "example": 1,
+          "description": "The number of the transaction"
+        },
+        "msgText": {
+          "type": "string",
+          "example": "The expression 'OfferLetter.Reference.length &gt; 0' does not evaluate to a boolean.",
+          "description": "The message text"
+        },
+        "batchID": {
+          "type": "integer",
+          "format": "int32",
+          "example": 0,
+          "description": "The ID of the batch"
+        },
+        "packageID": {
+          "type": "integer",
+          "format": "int32",
+          "example": -1,
+          "description": "The ID of the package"
+        },
+        "args": {
+          "type": "array",
+          "example": [
+            "28",
+            "OfferLetter.Reference.length &gt; 0"
+          ],
+          "description": "The list of the parameters of the message",
+          "items": {
+            "type": "string"
+          }
+        },
+        "docID": {
+          "type": "integer",
+          "format": "int32",
+          "example": 1,
+          "description": "The ID of the document"
+        },
+        "msgType": {
+          "type": "string",
+          "example": "E",
+          "description": "The message type: info (I), warn (W), or error (E)"
+        }
+      }
+    },
+    "TemplatePreviewChannel": {
+      "type": "object",
+      "properties": {
+        "pageCount": {
+          "type": "integer",
+          "format": "int32",
+          "example": "1",
+          "description": "The number of pages in the document generated"
+        },
+        "channelType": {
+          "type": "integer",
+          "format": "int64",
+          "example": 2,
+          "description": "The type of the channel.<br>Possible types are:<ul><li>'1' TYPE_HTML</li><li>'2' TYPE_PRINT</li><li>'3' TYPE_SMS</li><li>'4' TYPE_TEXT</li><li>'5' TYPE_TML</li><li>'6' TYPE_XML</li><li>'7' TYPE_WORDML</li><li>'8' TYPE_XSLFO</li></ul>"
+        },
+        "channelName": {
+          "type": "string",
+          "example": "Print",
+          "description": "The name of the channel"
+        },
+        "documentName": {
+          "type": "string",
+          "example": "PrimaryDocPS",
+          "description": "The name of the document generated"
+        },
+        "userKeys": {
+          "type": "object",
+          "example": {
+            "0": "33440001"
+          },
+          "description": "The list of user defined keys associated with this document",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "data": {
+          "type": "string",
+          "description": "The document data encoded as Base64.<br>Only populated when includeDocumentData is set to true in the request."
+        },
+        "properties": {
+          "type": "array",
+          "description": "A list of user defined properties associated with this document",
+          "items": {
+            "$ref": "#/definitions/properties"
+          }
+        },
+        "mimeType": {
+          "type": "string",
+          "example": "application/postscript",
+          "description": "The content type of the document"
+        },
+        "channelId": {
+          "type": "integer",
+          "format": "int64",
+          "example": 2,
+          "description": "The channel ID of the document"
+        },
+        "partLocation": {
+          "type": "string",
+          "example": "/v5/cachedItems/3f8380cf-b8d5-40ed-bdd4-79f15e80aedc/parts/0",
+          "description": "The reference to the document part for retrieval via the cachedItems method.<br>This is not used when includeDocumentData is set to true in the request."
+        }
+      },
+      "xml": {
+        "name": "templatePreviewChannel"
+      },
+      "x-thunderhead-xml-container-name": "TemplatePreviewChannels"
+    },
+    "exception": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "The tax date is out of range",
+          "description": "The user-defined exception message"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "example": 165600000,
+          "description": "The unique ID of the business exception"
+        },
+        "className": {
+          "type": "string",
+          "example": "Invalid Age",
+          "description": "The description of the business exception"
+        },
+        "classId": {
+          "type": "integer",
+          "format": "int64",
+          "example": 2,
+          "description": "The code of the business exception"
+        }
+      },
+      "xml": {
+        "name": "exception"
+      },
+      "x-thunderhead-xml-container-name": "exceptions"
+    },
+    "properties": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "merge.pdf",
+          "description": "The property name"
+        },
+        "value": {
+          "type": "string",
+          "example": "true",
+          "description": "The property value"
+        }
+      },
+      "description": "Request Body Configuration Properties. These optional properties can be used as input to document and draft generation.",
+      "xml": {
+        "name": "properties"
+      },
+      "x-thunderhead-xml-container-name": "propertiess"
+    }
+  }
+};

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PopulateCache async="false" continueOnError="false" enabled="true" name="cache-write-token">
+    <DisplayName>cache-write-token</DisplayName>
+    <Properties/>
+    <CacheKey>
+        <KeyFragment>access_token</KeyFragment>
+    </CacheKey>
+    <CacheResource>token-cache</CacheResource>
+    <Scope>Exclusive</Scope>
+    <ExpirySettings>
+        <TimeoutInSec ref="expires_in"/>
+    </ExpirySettings>
+    <Source>access_token</Source>
+</PopulateCache>

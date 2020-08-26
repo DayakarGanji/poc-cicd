@@ -1,0 +1,1 @@
+ context.setVariable("private.swaggerJson",JSON.stringify(swagger));

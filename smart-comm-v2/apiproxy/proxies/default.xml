@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <FaultRules>
+        <!-- could put additional fault rules here if needed for local proxy -->
+    </FaultRules>
+    <DefaultFaultRule name="all">
+        <AlwaysEnforce>true</AlwaysEnforce>
+        <Step>
+            <Condition>(response.header.Content-Type = "application/xml")</Condition>
+            <Name>xmltojson</Name>
+        </Step>
+        <Step>
+            <Name>fc-faultRulesHandling</Name>
+        </Step>
+        <Step>
+            <Condition>((request.header.accept = "application/xml") || (request.header.accept = "*/*"))</Condition>
+            <Name>set-content-type</Name>
+        </Step>
+    </DefaultFaultRule>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>verify-api-key</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
+            </Step>
+            <Step>
+                <Name>am-remove-apikey</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
+            </Step>
+            <Step>
+                <Name>cache-read-token</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
+            </Step>
+            <Step>
+                <Name>set-cache-token</Name>
+                <Condition>(request.verb != "OPTIONS") and (cached_access_token isNot null)</Condition>
+            </Step>
+            <Step>
+                <Name>fc-OAuth2.0</Name>
+                <Condition>(request.verb != "OPTIONS") and (cached_access_token is null)</Condition>
+            </Step>
+            <Step>
+                <Name>cache-write-token</Name>
+                <Condition>(request.verb != "OPTIONS") and (cached_access_token is null)</Condition>
+            </Step>
+            <Step>
+                <Name>set-oauth-token</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
+            </Step>
+            <Step>
+                <Name>js-set-schema</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
+            </Step>
+        </Request>
+        <Response>
+            <Step>
+                <Name>stats-collector</Name>
+            </Step>
+        </Response>
+    </PreFlow>
+    <Flows>
+        <Flow name="generateDocument">
+            <Description>Generate Document</Description>
+            <Request>
+                <!--<Step>-->
+                <!--    <Condition>request.header.Content-Type = "application/xml"</Condition>-->
+                <!--    <Name>XML-Validation</Name>-->
+                <!--</Step>-->
+                <Step>
+                    <Condition>request.header.Content-Type = "application/xml"</Condition>
+                    <Name>xmltojson-Proxy-Request</Name>
+                </Step>
+                <Step>
+                    <!--<Condition>request.header.Content-Type = "application/json"</Condition>-->
+                    <Name>fc-SchemaValidation</Name>
+                </Step>
+            </Request>
+            <Response/>
+            <Condition>(proxy.pathsuffix MatchesPath "/generate-document") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="optionsPreFlight">
+            <Request/>
+            <Response>
+                <Step>
+                    <Name>add-cors</Name>
+                </Step>
+            </Response>
+            <Condition>request.verb == "OPTIONS" AND request.header.origin != null AND request.header.Access-Control-Request-Method != null</Condition>
+        </Flow>
+        <Flow name="unknownResource">
+            <Description>Unknown Resource</Description>
+            <Request>
+                <Step>
+                    <Name>rf-unknown-resource</Name>
+                </Step>
+            </Request>
+            <Response/>
+        </Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <HTTPProxyConnection>
+        <BasePath>/smartcomm/v2</BasePath>
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="NoRoute">
+        <Condition>request.verb == "OPTIONS" AND request.header.origin != null AND request.header.Access-Control-Request-Method != null</Condition>
+    </RouteRule>
+    <RouteRule name="default">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+</ProxyEndpoint>

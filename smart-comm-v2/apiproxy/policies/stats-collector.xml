@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<StatisticsCollector async="false" continueOnError="false" enabled="true" name="stats-collector">
+    <DisplayName>stats-collector</DisplayName>
+    <Properties/>
+    <Statistics>
+        <Statistic name="quilt_app_id" ref="request.header.x-app-id" type="STRING"/>
+    </Statistics>
+</StatisticsCollector>

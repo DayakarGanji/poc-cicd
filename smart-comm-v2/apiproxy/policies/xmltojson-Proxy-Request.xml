@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<XMLToJSON async="false" continueOnError="false" enabled="true" name="xmltojson-Proxy-Request">
+    <DisplayName>xmltojson-Proxy-Request</DisplayName>
+    <Properties/>
+    <OutputVariable>request</OutputVariable>
+    <Source>request</Source>
+    <Options>
+        <RecognizeNumber>false</RecognizeNumber>
+        <RecognizeBoolean>true</RecognizeBoolean>
+        <RecognizeNull>true</RecognizeNull>
+        <NullValue>NULL</NullValue>
+        <StripLevels>2</StripLevels>
+    </Options>
+</XMLToJSON>

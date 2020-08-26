@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="5" name="smart-comm-v2">
+    <Basepaths>/smartcomm/v1</Basepaths>
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1597922268404</CreatedAt>
+    <CreatedBy>defaultUser</CreatedBy>
+    <Description>Smart communication APIs helps to generate documents with a predefined template.The document template needs to setup in Smart communciation website.</Description>
+    <DisplayName>Smart-communication-API</DisplayName>
+    <LastModifiedAt>1598194977198</LastModifiedAt>
+    <LastModifiedBy>defaultUser</LastModifiedBy>
+    <ManifestVersion>SHA-512:aaf582b95e02d72f1827b77596ecd02ddd8346a5a43a3720af8dc0461ac59ae85b11139bc39af67d5a93e28048569d04e73936031add43b0b10444517cf2a55e</ManifestVersion>
+    <Policies>
+        <Policy>add-cors</Policy>
+        <Policy>am-remove-apikey</Policy>
+        <Policy>am-remove-set-cookie</Policy>
+        <Policy>cache-read-token</Policy>
+        <Policy>cache-write-token</Policy>
+        <Policy>fc-OAuth2.0</Policy>
+        <Policy>fc-SchemaValidation</Policy>
+        <Policy>fc-faultRulesHandling</Policy>
+        <Policy>js-set-schema</Policy>
+        <Policy>rf-unknown-resource</Policy>
+        <Policy>set-cache-token</Policy>
+        <Policy>set-content-type</Policy>
+        <Policy>set-custom-json-response</Policy>
+        <Policy>set-oauth-token</Policy>
+        <Policy>set-path</Policy>
+        <Policy>stats-collector</Policy>
+        <Policy>verify-api-key</Policy>
+        <Policy>xmltojson-Proxy-Request</Policy>
+        <Policy>xmltojson</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>openapi://association.json</Resource>
+        <Resource>jsc://Set-Schema.js</Resource>
+        <Resource>jsc://smart-openapi-spec-v1.json</Resource>
+    </Resources>
+    <Spec></Spec>
+    <TargetServers/>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>
